@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Памятка (Отслеживание ВС)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ----- ОБЩИЙ СБРОС И БАЗОВЫЕ СТИЛИ ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #eef2f7;
+            color: #1a2634;
+            min-height: 100vh;
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .dashboard {
+            max-width: 1280px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 24px 28px 28px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        /* ----- ВЕРХНЯЯ ПАНЕЛЬ ----- */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 16px 12px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-area .logo-img {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .logo-area .logo-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .logo-area .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .logo-area .logo-text .main-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a2634;
+        }
+
+        .logo-area .logo-text .subtitle {
+            font-size: 14px;
+            color: #5f6c80;
+            font-weight: 400;
+        }
+
+        .clock-block {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f8fafc;
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .clock-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1.2;
+        }
+
+        .clock-item .clock-label {
+            font-size: 10px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .clock-item .clock-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a2634;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.3px;
+        }
+
+        .clock-separator {
+            width: 1px;
+            height: 28px;
+            background: #e2e8f0;
+        }
+
+        /* ----- ОСНОВНАЯ СЕТКА ----- */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 24px;
+            min-height: 460px;
+        }
+
+        /* ----- ЛЕВАЯ КОЛОНКА ----- */
+        .left-panel {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .panel-header {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #5f6c80;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .panel-header i {
+            color: #1a56db;
+            margin-right: 6px;
+        }
+
+        .ac-selector {
+            margin-bottom: 20px;
+        }
+
+        .ac-selector label {
+            display: block;
+            font-size: 13px;
+            color: #3d4a5c;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .ac-selector select {
+            width: 100%;
+            padding: 10px 14px;
+            background: #ffffff;
+            border: 1px solid #d1d9e6;
+            border-radius: 8px;
+            color: #1a2634;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            outline: none;
+            transition: 0.15s;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235f6c80' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+        }
+
+        .ac-selector select:hover {
+            border-color: #b0c0d4;
+        }
+
+        .ac-selector select:focus {
+            border-color: #1a56db;
+            box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+        }
+
+        .ac-info {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .ac-info .ac-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .ac-info .ac-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ac-info .ac-title .plane-icon {
+            font-size: 18px;
+            color: #1a56db;
+        }
+
+        .ac-info .ac-title .ac-reg {
+            font-weight: 600;
+            font-size: 17px;
+            color: #1a2634;
+        }
+
+        .ac-info .ac-title .ac-type {
+            font-size: 12px;
+            color: #5f6c80;
+            background: #eef2f7;
+            padding: 0 10px;
+            border-radius: 30px;
+            font-weight: 500;
+        }
+
+        .ac-devices {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .device-tag {
+            font-size: 11px;
+            background: #eef2f7;
+            padding: 3px 10px;
+            border-radius: 30px;
+            color: #3d4a5c;
+            border: 1px solid #e2e8f0;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .device-tag .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+            background: #16a34a;
+        }
+
+        /* ----- ПРАВАЯ КОЛОНКА ----- */
+        .right-panel {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .scenario-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .scenario-item {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .scenario-item:hover {
+            border-color: #b0c0d4;
+            background: #fcfdff;
+        }
+
+        .scenario-item.active {
+            border-color: #1a56db;
+            background: #f0f5ff;
+            box-shadow: 0 0 0 1px #1a56db;
+        }
+
+        .scenario-item .sc-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .scenario-item .sc-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+        }
+
+        .scenario-item .sc-icon.normal {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .scenario-item .sc-icon.warning {
+            background: #fef9c3;
+            color: #ca8a04;
+        }
+
+        .scenario-item .sc-icon.danger {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .scenario-item .sc-icon.info {
+            background: #cffafe;
+            color: #0e7490;
+        }
+
+        .scenario-item .sc-name {
+            font-weight: 500;
+            font-size: 14px;
+            color: #1a2634;
+        }
+
+        .scenario-item .sc-badge {
+            font-size: 10px;
+            color: #5f6c80;
+            background: #eef2f7;
+            padding: 1px 10px;
+            border-radius: 30px;
+        }
+
+        .scenario-item .sc-arrow {
+            color: #94a3b8;
+            font-size: 12px;
+            transition: 0.15s;
+        }
+
+        .scenario-item:hover .sc-arrow {
+            color: #1a56db;
+            transform: translateX(3px);
+        }
+
+        /* ----- ПРОЦЕДУРА ----- */
+        .procedure-container {
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px solid #e2e8f0;
+            display: none;
+            animation: fadeSlide 0.2s ease;
+        }
+
+        .procedure-container.open {
+            display: block;
+        }
+
+        @keyframes fadeSlide {
+            0% { opacity: 0; transform: translateY(6px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .procedure-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a2634;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .procedure-title i {
+            color: #1a56db;
+        }
+
+        .procedure-description {
+            background: #f0f5ff;
+            border-left: 3px solid #1a56db;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 13px;
+            color: #3d4a5c;
+            line-height: 1.5;
+        }
+
+        .procedure-description strong {
+            color: #1a56db;
+            font-weight: 600;
+        }
+
+        /* Отсылка к РПП */
+        .rpp-reference {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #fff7ed;
+            border: 1px solid #fdba74;
+            color: #9a3412;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            margin: 4px 0;
+            box-shadow: 0 1px 3px rgba(154, 52, 18, 0.08);
+        }
+
+        .rpp-reference i {
+            color: #ea580c;
+            font-size: 14px;
+        }
+
+        .rpp-reference .rpp-label {
+            color: #c2410c;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+        }
+
+        .rpp-reference-block {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+            border: 1px solid #fdba74;
+            border-left: 4px solid #ea580c;
+            color: #7c2d12;
+            padding: 16px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-top: 8px;
+            line-height: 1.5;
+            box-shadow: 0 2px 8px rgba(234, 88, 12, 0.1);
+        }
+
+        .rpp-reference-block i {
+            color: #ea580c;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .rpp-reference-block .rpp-text {
+            flex: 1;
+        }
+
+        .rpp-reference-block .rpp-number {
+            display: block;
+            font-weight: 700;
+            color: #9a3412;
+            font-size: 15px;
+            margin-top: 4px;
+        }
+
+        .procedure-step {
+            display: flex;
+            gap: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid #eef2f7;
+        }
+
+        .procedure-step:last-child {
+            border-bottom: none;
+        }
+
+        .procedure-step .step-num {
+            width: 24px;
+            height: 24px;
+            background: #eef2f7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: #5f6c80;
+            flex-shrink: 0;
+        }
+
+        .procedure-step .step-content {
+            flex: 1;
+        }
+
+        .procedure-step .step-text {
+            font-size: 14px;
+            color: #1a2634;
+            line-height: 1.4;
+        }
+
+        .procedure-step .step-text .hl {
+            font-weight: 700;
+            color: #1a56db;
+            background: rgba(26, 86, 219, 0.07);
+            padding: 1px 6px;
+            border-radius: 4px;
+        }
+
+        /* ----- БЛОК-СХЕМА ----- */
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            padding: 8px 0;
+        }
+
+        .flowchart-node {
+            background: #ffffff;
+            border: 1px solid #d1d9e6;
+            border-radius: 10px;
+            padding: 12px 18px;
+            width: 100%;
+            max-width: 560px;
+            font-size: 13px;
+            color: #1a2634;
+            text-align: center;
+            line-height: 1.4;
+            position: relative;
+            transition: 0.15s;
+        }
+
+        .flowchart-node:hover {
+            border-color: #1a56db;
+            box-shadow: 0 2px 8px rgba(26, 86, 219, 0.08);
+        }
+
+        .flowchart-node .node-title {
+            font-weight: 600;
+            color: #1a56db;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .flowchart-node.start {
+            background: #f0f5ff;
+            border-color: #1a56db;
+        }
+
+        .flowchart-node.decision {
+            background: #fef9c3;
+            border-color: #ca8a04;
+            border-radius: 30px;
+        }
+
+        .flowchart-node.decision .node-title {
+            color: #ca8a04;
+        }
+
+        .flowchart-node.success {
+            background: #dcfce7;
+            border-color: #16a34a;
+        }
+
+        .flowchart-node.success .node-title {
+            color: #16a34a;
+        }
+
+        .flowchart-node.danger {
+            background: #fee2e2;
+            border-color: #dc2626;
+        }
+
+        .flowchart-node.danger .node-title {
+            color: #dc2626;
+        }
+
+        .flowchart-arrow {
+            color: #94a3b8;
+            font-size: 18px;
+            line-height: 1;
+            padding: 4px 0;
+        }
+
+        .flowchart-branch {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+            max-width: 560px;
+            justify-content: center;
+        }
+
+        .flowchart-branch .flowchart-node {
+            flex: 1;
+            max-width: none;
+        }
+
+        .flowchart-label {
+            font-size: 11px;
+            color: #5f6c80;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            padding: 2px 8px;
+            background: #f8fafc;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .flowchart-node .rpp-reference {
+            display: inline-flex;
+            margin-top: 8px;
+            font-size: 12px;
+            padding: 4px 12px;
+        }
+
+        /* ----- РАЗДЕЛ IRIDIUM (внутри сценария) ----- */
+        .iridium-section {
+            margin-top: 4px;
+        }
+
+        .iridium-subtitle {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1a2634;
+            margin: 14px 0 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .iridium-subtitle:first-child {
+            margin-top: 0;
+        }
+
+        .iridium-subtitle i {
+            color: #06b6d4;
+        }
+
+        .iridium-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .iridium-step {
+            display: flex;
+            gap: 12px;
+            padding: 6px 0;
+            font-size: 13px;
+            color: #1a2634;
+            line-height: 1.5;
+        }
+
+        .iridium-step .ir-num {
+            width: 22px;
+            height: 22px;
+            background: #cffafe;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            color: #0e7490;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .iridium-step .ir-text {
+            flex: 1;
+        }
+
+        .iridium-step .ir-text code {
+            background: #f1f5f9;
+            padding: 1px 8px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 12px;
+            color: #0e7490;
+            font-weight: 600;
+            border: 1px solid #e2e8f0;
+        }
+
+        .iridium-step .ir-text .menu-path {
+            background: #f0f5ff;
+            padding: 1px 8px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 12px;
+            color: #1a56db;
+            font-weight: 600;
+            border: 1px solid #dbeafe;
+        }
+
+        .iridium-example {
+            background: #ecfdf5;
+            border-left: 3px solid #10b981;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #065f46;
+            margin: 8px 0;
+            font-family: 'Consolas', 'Courier New', monospace;
+            line-height: 1.5;
+        }
+
+        .iridium-example i {
+            color: #10b981;
+            margin-right: 4px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .placeholder-text {
+            text-align: center;
+            color: #94a3b8;
+            padding: 40px 20px;
+            font-size: 14px;
+        }
+
+        .placeholder-text i {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 10px;
+            color: #cbd5e1;
+        }
+
+        /* ----- ФУТЕР ----- */
+        .footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 13px;
+            color: #5f6c80;
+            background: #f1f4f9;
+            padding: 14px 20px;
+            border-radius: 8px;
+            margin-top: 24px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .footer i {
+            margin-right: 6px;
+            color: #94a3b8;
+        }
+
+        /* ----- АДАПТИВНОСТЬ ----- */
+        @media (max-width: 860px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .left-panel {
+                max-height: none;
+            }
+
+            .flowchart-branch {
+                flex-direction: column;
+            }
+
+            .rpp-reference-block {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 500px) {
+            body {
+                padding: 12px;
+            }
+
+            .dashboard {
+                padding: 16px;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .logo-area .logo-img {
+                width: 48px;
+                height: 48px;
+            }
+
+            .logo-area .logo-text .main-title {
+                font-size: 17px;
+            }
+
+            .logo-area .logo-text .subtitle {
+                font-size: 12px;
+            }
+
+            .clock-block {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard">
+
+        <!-- ===== ВЕРХНЯЯ ПАНЕЛЬ ===== -->
+        <header class="top-bar">
+            <div class="logo-area">
+                <div class="logo-img">
+                    <img src="logo.png" alt="Логотип" />
+                </div>
+                <div class="logo-text">
+                    <span class="main-title">Памятка</span>
+                    <span class="subtitle">Отслеживание ВС</span>
+                </div>
+            </div>
+            <div class="clock-block">
+                <div class="clock-item">
+                    <span class="clock-label">UTC</span>
+                    <span class="clock-value" id="utcClock">--:--:--</span>
+                </div>
+                <div class="clock-separator"></div>
+                <div class="clock-item">
+                    <span class="clock-label">Москва</span>
+                    <span class="clock-value" id="mskClock">--:--:--</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- ===== ОСНОВНАЯ СЕТКА ===== -->
+        <div class="main-grid">
+
+            <!-- ===== ЛЕВАЯ КОЛОНКА ===== -->
+            <aside class="left-panel">
+                <div class="panel-header">
+                    <i class="fas fa-plane"></i> Воздушное судно
+                </div>
+
+                <div class="ac-selector">
+                    <label for="acSelect"><i class="fas fa-search" style="margin-right:6px;"></i> Выберите ВС</label>
+                    <select id="acSelect" onchange="selectAC(this.value)">
+                        <!-- Заполняется из JavaScript -->
+                    </select>
+                </div>
+
+                <div class="ac-info" id="acInfo">
+                    <!-- Данные из JavaScript -->
+                </div>
+            </aside>
+
+            <!-- ===== ПРАВАЯ КОЛОНКА ===== -->
+            <section class="right-panel" id="rightPanel">
+                <div id="scenarioContent">
+                    <!-- Данные из JavaScript -->
+                </div>
+            </section>
+
+        </div>
+
+        <!-- ===== ФУТЕР ===== -->
+        <div class="footer">
+            <span><i class="fas fa-database"></i> Версия инструкции: 1.0</span>
+        </div>
+
+    </div>
+
+    <script>
+        // ----- ЧАСЫ -----
+        function updateClocks() {
+            const now = new Date();
+            const utcHours = String(now.getUTCHours()).padStart(2, '0');
+            const utcMinutes = String(now.getUTCMinutes()).padStart(2, '0');
+            const utcSeconds = String(now.getUTCSeconds()).padStart(2, '0');
+            document.getElementById('utcClock').textContent = `${utcHours}:${utcMinutes}:${utcSeconds}`;
+
+            const mskHours = String((now.getUTCHours() + 3) % 24).padStart(2, '0');
+            const mskMinutes = String(now.getUTCMinutes()).padStart(2, '0');
+            const mskSeconds = String(now.getUTCSeconds()).padStart(2, '0');
+            document.getElementById('mskClock').textContent = `${mskHours}:${mskMinutes}:${mskSeconds}`;
+        }
+        updateClocks();
+        setInterval(updateClocks, 1000);
+
+        // ----- ОБЩИЕ ОПИСАНИЯ -----
+        const scenarioDescriptions = {
+            normal: 'Для отслеживания используется трекер <strong>Navtelecom</strong>.',
+            warning: 'При потере связи с трекером Navtelecom действовать по алгоритму ниже.',
+            iridium: 'Отправка координат через спутниковый телефон <strong>Iridium</strong>.'
+        };
+
+        // ----- ШТАТНЫЙ РЕЖИМ -----
+        const normalProcedure = [
+            'На почту диспетчера ПДС приходит сообщение о начале движения ВС (<span class="hl">Взлёт / Посадка</span>).',
+            'С этого момента диспетчер ПДС отслеживает ВС на портале <span class="hl">Wialon Local</span>.',
+            'Если связь с ВС отсутствует (состояние соединения — «<span class="hl">Объект не на связи</span>»), удостовериться, что ВС в воздухе, трекер на борту и включён.',
+            'При подтверждении, что ВС в воздухе, а объект продолжает быть не на связи — перейти к процедуре «<span class="hl">Сбой передачи данных</span>».'
+        ];
+
+        // ----- СБОЙ ПЕРЕДАЧИ ДАННЫХ -----
+        const warningFlowchart = {
+            type: 'flowchart',
+            nodes: [
+                {
+                    type: 'start',
+                    title: 'Шаг 1',
+                    text: 'Диспетчер ПДС устанавливает связь с ВС через мессенджер <strong>MAX</strong> и уведомляет экипаж о неисправности трекера'
+                },
+                {
+                    type: 'decision',
+                    title: 'Проверка',
+                    text: 'Связь установлена?'
+                },
+                {
+                    type: 'branch',
+                    branches: [
+                        {
+                            label: 'Да',
+                            node: {
+                                type: 'success',
+                                title: 'Шаг 2а',
+                                text: 'Вести коммуникацию через этот канал связи до восстановления трекера'
+                            }
+                        },
+                        {
+                            label: 'Нет',
+                            node: {
+                                type: 'warning',
+                                title: 'Шаг 2б',
+                                text: 'Использовать любые доступные каналы связи (сотовая или спутниковая) для установления контакта с экипажем и получения информации о местоположении ВС'
+                            }
+                        }
+                    ]
+                },
+                {
+                    type: 'decision',
+                    title: 'Проверка',
+                    text: 'Контакта с экипажем удалось достичь?'
+                },
+                {
+                    type: 'branch',
+                    branches: [
+                        {
+                            label: 'Да',
+                            node: {
+                                type: 'success',
+                                title: 'Шаг 3а',
+                                text: 'Продолжить сопровождение ВС по данным, полученным от экипажа. <strong>Использовать процедуру отправки местоположения с использованием спутникового телефона.</strong>'
+                            }
+                        },
+                        {
+                            label: 'Нет',
+                            node: {
+                                type: 'danger',
+                                title: 'Шаг 3б',
+                                text: 'Активируется процедура по РПП',
+                                rpp: 'РПП Часть А, Глава 12, пункт 12.16'
+                            }
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // ----- СИГНАЛ SOS -----
+        const sosScenario = {
+            label: 'Сигнал SOS',
+            icon: 'fa-bell',
+            badge: 'danger',
+            sosBlock: true
+        };
+
+        // ----- IRIDIUM: СЦЕНАРИЙ ОТПРАВКИ СООБЩЕНИЙ -----
+        const iridiumScenario = {
+            label: 'Отправка сообщений Iridium',
+            icon: 'fa-satellite',
+            badge: 'info',
+            description: scenarioDescriptions.iridium,
+            procedure: { type: 'iridium' }
+        };
+
+        // ----- ДАННЫЕ ПО ВС -----
+        const aircraftData = {
+            ac1: {
+                reg: 'RA-07329',
+                type: 'EC130',
+                devices: ['Navtelecom S-4533', 'Iridium 9555', 'ELT INTEGRA'],
+                scenarios: {
+                    normal: { label: 'Штатный режим', icon: 'fa-check-circle', badge: 'normal', description: scenarioDescriptions.normal, procedure: normalProcedure },
+                    warning: { label: 'Сбой передачи данных', icon: 'fa-exclamation-triangle', badge: 'warning', description: scenarioDescriptions.warning, procedure: warningFlowchart },
+                    iridium: iridiumScenario,
+                    sos: sosScenario
+                }
+            },
+            ac2: {
+                reg: 'RA-07331',
+                type: 'EC130',
+                devices: ['Navtelecom S-4533', 'Iridium 9555', 'ELT INTEGRA'],
+                scenarios: {
+                    normal: { label: 'Штатный режим', icon: 'fa-check-circle', badge: 'normal', description: scenarioDescriptions.normal, procedure: normalProcedure },
+                    warning: { label: 'Сбой передачи данных', icon: 'fa-exclamation-triangle', badge: 'warning', description: scenarioDescriptions.warning, procedure: warningFlowchart },
+                    iridium: iridiumScenario,
+                    sos: sosScenario
+                }
+            },
+            ac3: {
+                reg: 'RA-07266',
+                type: 'EC130',
+                devices: ['Navtelecom S-2513', 'Iridium 9555', 'RockSTAR I Iridium', 'ELT INTEGRA'],
+                scenarios: {
+                    normal: { label: 'Штатный режим', icon: 'fa-check-circle', badge: 'normal', description: scenarioDescriptions.normal, procedure: normalProcedure },
+                    warning: { label: 'Сбой передачи данных', icon: 'fa-exclamation-triangle', badge: 'warning', description: scenarioDescriptions.warning, procedure: warningFlowchart },
+                    iridium: iridiumScenario,
+                    sos: sosScenario
+                }
+            },
+            ac4: {
+                reg: 'RA-07542',
+                type: 'EC130',
+                devices: ['Navtelecom S-4533', 'Iridium 9575', 'ELT INTEGRA'],
+                scenarios: {
+                    normal: { label: 'Штатный режим', icon: 'fa-check-circle', badge: 'normal', description: scenarioDescriptions.normal, procedure: normalProcedure },
+                    warning: { label: 'Сбой передачи данных', icon: 'fa-exclamation-triangle', badge: 'warning', description: scenarioDescriptions.warning, procedure: warningFlowchart },
+                    iridium: iridiumScenario,
+                    sos: sosScenario
+                }
+            },
+            ac5: {
+                reg: 'RA-07543',
+                type: 'EC130',
+                devices: ['Navtelecom S-2513', 'Iridium 9555', 'ELT INTEGRA'],
+                scenarios: {
+                    normal: { label: 'Штатный режим', icon: 'fa-check-circle', badge: 'normal', description: scenarioDescriptions.normal, procedure: normalProcedure },
+                    warning: { label: 'Сбой передачи данных', icon: 'fa-exclamation-triangle', badge: 'warning', description: scenarioDescriptions.warning, procedure: warningFlowchart },
+                    iridium: iridiumScenario,
+                    sos: sosScenario
+                }
+            },
+            ac6: {
+                reg: 'RA-04068',
+                type: 'EC130',
+                devices: ['Navtelecom S-2513', 'Iridium 9555', 'ELT INTEGRA'],
+                scenarios: {
+                    normal: { label: 'Штатный режим', icon: 'fa-check-circle', badge: 'normal', description: scenarioDescriptions.normal, procedure: normalProcedure },
+                    warning: { label: 'Сбой передачи данных', icon: 'fa-exclamation-triangle', badge: 'warning', description: scenarioDescriptions.warning, procedure: warningFlowchart },
+                    iridium: iridiumScenario,
+                    sos: sosScenario
+                }
+            },
+            ac7: {
+                reg: 'RA-25354',
+                type: 'Mi8',
+                devices: ['Navtelecom S-2513', 'Iridium 9575', 'АРМ406', 'ПАРМ406'],
+                scenarios: {
+                    normal: { label: 'Штатный режим', icon: 'fa-check-circle', badge: 'normal', description: scenarioDescriptions.normal, procedure: normalProcedure },
+                    warning: { label: 'Сбой передачи данных', icon: 'fa-exclamation-triangle', badge: 'warning', description: scenarioDescriptions.warning, procedure: warningFlowchart },
+                    iridium: iridiumScenario,
+                    sos: sosScenario
+                }
+            },
+            ac8: {
+                reg: 'RA-22678',
+                type: 'Mi8',
+                devices: ['Navtelecom S-2513', 'Iridium 9575', 'АРМ406', 'ПАРМ406'],
+                scenarios: {
+                    normal: { label: 'Штатный режим', icon: 'fa-check-circle', badge: 'normal', description: scenarioDescriptions.normal, procedure: normalProcedure },
+                    warning: { label: 'Сбой передачи данных', icon: 'fa-exclamation-triangle', badge: 'warning', description: scenarioDescriptions.warning, procedure: warningFlowchart },
+                    iridium: iridiumScenario,
+                    sos: sosScenario
+                }
+            }
+        };
+
+        // ----- СОСТОЯНИЕ -----
+        let currentAC = 'ac1';
+        let currentScenario = null;
+
+        // ----- ЗАПОЛНЕНИЕ СПИСКА -----
+        function populateSelect() {
+            const select = document.getElementById('acSelect');
+            const keys = Object.keys(aircraftData);
+            select.innerHTML = '';
+            keys.forEach(key => {
+                const data = aircraftData[key];
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = `${data.reg} · ${data.type}`;
+                select.appendChild(option);
+            });
+        }
+
+        // ----- ВЫБОР ВС -----
+        function selectAC(acId) {
+            currentAC = acId;
+            currentScenario = null;
+            renderACInfo(acId);
+            renderScenarios(acId);
+        }
+
+        // ----- ИНФО О ВС -----
+        function renderACInfo(acId) {
+            const data = aircraftData[acId];
+            if (!data) return;
+            const container = document.getElementById('acInfo');
+            let devicesHtml = data.devices.map(dev => `
+                <span class="device-tag"><span class="dot"></span> ${dev}</span>
+            `).join('');
+            container.innerHTML = `
+                <div class="ac-header">
+                    <div class="ac-title">
+                        <i class="fas fa-helicopter plane-icon"></i>
+                        <span class="ac-reg">${data.reg}</span>
+                        <span class="ac-type">${data.type}</span>
+                    </div>
+                </div>
+                <div class="ac-devices">${devicesHtml}</div>
+            `;
+        }
+
+        // ----- СПИСОК СЦЕНАРИЕВ -----
+        function renderScenarios(acId) {
+            const data = aircraftData[acId];
+            if (!data) return;
+            const container = document.getElementById('scenarioContent');
+            const scenarios = data.scenarios;
+            const scenarioKeys = Object.keys(scenarios);
+
+            let html = `
+                <div style="font-size:12px;text-transform:uppercase;letter-spacing:0.5px;color:#5f6c80;margin-bottom:14px;font-weight:600;">
+                    <i class="fas fa-tasks" style="margin-right:6px;"></i> Сценарии работы
+                </div>
+                <div class="scenario-list">
+            `;
+
+            scenarioKeys.forEach(key => {
+                const sc = scenarios[key];
+                const isActive = (currentScenario === key) ? 'active' : '';
+                const labelMap = { normal: 'штатный', warning: 'сбой', iridium: 'инструкция', sos: 'тревога' };
+                html += `
+                    <div class="scenario-item ${isActive}" onclick="selectScenario('${acId}','${key}')">
+                        <div class="sc-left">
+                            <div class="sc-icon ${sc.badge}">
+                                <i class="fas ${sc.icon}"></i>
+                            </div>
+                            <span class="sc-name">${sc.label}</span>
+                            <span class="sc-badge">${labelMap[key] || key}</span>
+                        </div>
+                        <i class="fas fa-chevron-right sc-arrow"></i>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+
+            if (currentScenario && scenarios[currentScenario]) {
+                html += renderProcedure(scenarios[currentScenario]);
+            } else {
+                html += `
+                    <div class="placeholder-text">
+                        <i class="fas fa-hand-pointer"></i>
+                        Выберите сценарий для просмотра<br>детальной процедуры
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        // ----- ОТРИСОВКА ПРОЦЕДУРЫ -----
+        function renderProcedure(scenario) {
+            let bodyHtml = '';
+            let descHtml = '';
+
+            if (scenario.sosBlock) {
+                bodyHtml = `
+                    <div class="rpp-reference-block">
+                        <i class="fas fa-book"></i>
+                        <div class="rpp-text">
+                            При поступлении сигнала SOS от воздушного судна или экипажа активируется процедура, описанная в:
+                            <span class="rpp-number">РПП Часть А, Глава 11, пункт 11.4</span>
+                        </div>
+                    </div>
+                `;
+            } else if (scenario.description) {
+                descHtml = `<div class="procedure-description">${scenario.description}</div>`;
+            }
+
+            if (scenario.procedure && scenario.procedure.type === 'flowchart') {
+                bodyHtml = renderFlowchart(scenario.procedure);
+            } else if (scenario.procedure && scenario.procedure.type === 'iridium') {
+                bodyHtml = renderIridium();
+            } else if (Array.isArray(scenario.procedure)) {
+                scenario.procedure.forEach((step, idx) => {
+                    bodyHtml += `
+                        <div class="procedure-step">
+                            <div class="step-num">${idx + 1}</div>
+                            <div class="step-content">
+                                <div class="step-text">${step}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            return `
+                <div class="procedure-container open">
+                    <div class="procedure-title">
+                        <i class="fas fa-list-ul"></i> Процедура: ${scenario.label}
+                    </div>
+                    ${descHtml}
+                    ${bodyHtml}
+                </div>
+            `;
+        }
+
+        // ----- ОТРИСОВКА IRIDIUM -----
+        function renderIridium() {
+            return `
+                <div class="iridium-section">
+
+                    <div class="iridium-subtitle">
+                        <i class="fas fa-cog"></i> Подготовка
+                    </div>
+                    <div class="iridium-steps">
+                        <div class="iridium-step">
+                            <div class="ir-num">1</div>
+                            <div class="ir-text">Выйдите на открытое место, откиньте антенну, дождитесь надписи <strong>Registered</strong> на экране.</div>
+                        </div>
+                        <div class="iridium-step">
+                            <div class="ir-num">2</div>
+                            <div class="ir-text">
+                                Убедитесь, что SMS-центр настроен (делается один раз):
+                                <br><span class="menu-path">Menu → Messages → Settings → Service Center</span>
+                                <br>Введите: <code>+79541070005</code> → <strong>OK</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="iridium-subtitle">
+                        <i class="fas fa-paper-plane"></i> Отправка на email, не сохранённый в телефонной книге
+                    </div>
+                    <div class="iridium-steps">
+                        <div class="iridium-step">
+                            <div class="ir-num">1</div>
+                            <div class="ir-text"><span class="menu-path">Menu → Messages → Create Message</span></div>
+                        </div>
+                        <div class="iridium-step">
+                            <div class="ir-num">2</div>
+                            <div class="ir-text">
+                                Наберите сообщение в формате: <code>email_адрес</code> пробел <code>текст_сообщения</code>
+                            </div>
+                        </div>
+                        <div class="iridium-step">
+                            <div class="ir-num">3</div>
+                            <div class="ir-text">
+                                <strong>Важно:</strong> чтобы ввести символ <code>@</code> — нажмите клавишу <strong>1</strong> дважды.
+                            </div>
+                        </div>
+                        <div class="iridium-step">
+                            <div class="ir-num">4</div>
+                            <div class="ir-text">
+                                Когда сообщение набрано, нажмите <span class="menu-path">Options → Send</span>
+                            </div>
+                        </div>
+                        <div class="iridium-step">
+                            <div class="ir-num">5</div>
+                            <div class="ir-text">
+                                На экране <strong>Send To</strong> выберите <span class="menu-path">New Recipient → Add → Enter Number</span>
+                            </div>
+                        </div>
+                        <div class="iridium-step">
+                            <div class="ir-num">6</div>
+                            <div class="ir-text">
+                                Введите специальный номер сервера: <code>+*2</code> (или <code>00*2</code>) → <strong>OK</strong>
+                            </div>
+                        </div>
+                        <div class="iridium-step">
+                            <div class="ir-num">7</div>
+                            <div class="ir-text">
+                                Нажмите <span class="menu-path">Send</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="iridium-example">
+                        <i class="fas fa-lightbulb"></i>
+                        <strong>Пример сообщения:</strong><br>
+                        ops@skylight.aero 71.973028, 102.495729 TO/LDG
+                    </div>
+                </div>
+            `;
+        }
+
+        // ----- ОТРИСОВКА БЛОК-СХЕМЫ -----
+        function renderFlowchart(flowchart) {
+            let html = '<div class="flowchart">';
+
+            flowchart.nodes.forEach((node, idx) => {
+                if (node.type === 'branch') {
+                    html += `<div class="flowchart-branch">`;
+                    node.branches.forEach(branch => {
+                        let rppHtml = '';
+                        if (branch.node.rpp) {
+                            rppHtml = `
+                                <div class="rpp-reference">
+                                    <i class="fas fa-book"></i>
+                                    <span class="rpp-label">РПП:</span>
+                                    <span>${branch.node.rpp}</span>
+                                </div>
+                            `;
+                        }
+                        html += `
+                            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;">
+                                <span class="flowchart-label">${branch.label}</span>
+                                <div class="flowchart-node ${branch.node.type}">
+                                    <div class="node-title">${branch.node.title}</div>
+                                    <div>${branch.node.text}</div>
+                                    ${rppHtml}
+                                </div>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                } else {
+                    html += `
+                        <div class="flowchart-node ${node.type}">
+                            <div class="node-title">${node.title}</div>
+                            <div>${node.text}</div>
+                        </div>
+                    `;
+                }
+
+                if (idx < flowchart.nodes.length - 1) {
+                    html += `<div class="flowchart-arrow"><i class="fas fa-arrow-down"></i></div>`;
+                }
+            });
+
+            html += '</div>';
+            return html;
+        }
+
+        // ----- ВЫБОР СЦЕНАРИЯ -----
+        function selectScenario(acId, scenarioKey) {
+            if (currentScenario === scenarioKey) {
+                currentScenario = null;
+            } else {
+                currentScenario = scenarioKey;
+            }
+            renderScenarios(acId);
+        }
+
+        // ----- ИНИЦИАЛИЗАЦИЯ -----
+        populateSelect();
+        selectAC('ac1');
+    </script>
+
+</body>
+</html>
