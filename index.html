@@ -6,7 +6,7 @@
     <title>Памятка (Отслеживание ВС)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
-        /* ----- ОБЩИЙ СБРОС И БАЗОВЫЕ СТИЛИ (СВЕТЛАЯ ТЕМА) ----- */
+        /* ----- ОБЩИЙ СБРОС И БАЗОВЫЕ СТИЛИ ----- */
         * {
             margin: 0;
             padding: 0;
@@ -90,13 +90,44 @@
             font-weight: 400;
         }
 
-        .utc-time {
-            color: #5f6c80;
-            font-size: 13px;
+        .clock-block {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             background: #f8fafc;
-            padding: 6px 16px;
+            padding: 8px 16px;
             border-radius: 30px;
             border: 1px solid #e2e8f0;
+        }
+
+        .clock-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1.2;
+        }
+
+        .clock-item .clock-label {
+            font-size: 10px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .clock-item .clock-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a2634;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.3px;
+        }
+
+        .clock-separator {
+            width: 1px;
+            height: 28px;
+            background: #e2e8f0;
         }
 
         /* ----- ОСНОВНАЯ СЕТКА ----- */
@@ -305,6 +336,11 @@
             color: #dc2626;
         }
 
+        .scenario-item .sc-icon.info {
+            background: #cffafe;
+            color: #0e7490;
+        }
+
         .scenario-item .sc-name {
             font-weight: 500;
             font-size: 14px;
@@ -477,7 +513,6 @@
             line-height: 1.4;
         }
 
-        /* Выделение ключевых слов в штатном режиме */
         .procedure-step .step-text .hl {
             font-weight: 700;
             color: #1a56db;
@@ -596,6 +631,103 @@
             padding: 4px 12px;
         }
 
+        /* ----- РАЗДЕЛ IRIDIUM (внутри сценария) ----- */
+        .iridium-section {
+            margin-top: 4px;
+        }
+
+        .iridium-subtitle {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1a2634;
+            margin: 14px 0 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .iridium-subtitle:first-child {
+            margin-top: 0;
+        }
+
+        .iridium-subtitle i {
+            color: #06b6d4;
+        }
+
+        .iridium-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .iridium-step {
+            display: flex;
+            gap: 12px;
+            padding: 6px 0;
+            font-size: 13px;
+            color: #1a2634;
+            line-height: 1.5;
+        }
+
+        .iridium-step .ir-num {
+            width: 22px;
+            height: 22px;
+            background: #cffafe;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            color: #0e7490;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .iridium-step .ir-text {
+            flex: 1;
+        }
+
+        .iridium-step .ir-text code {
+            background: #f1f5f9;
+            padding: 1px 8px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 12px;
+            color: #0e7490;
+            font-weight: 600;
+            border: 1px solid #e2e8f0;
+        }
+
+        .iridium-step .ir-text .menu-path {
+            background: #f0f5ff;
+            padding: 1px 8px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 12px;
+            color: #1a56db;
+            font-weight: 600;
+            border: 1px solid #dbeafe;
+        }
+
+        .iridium-example {
+            background: #ecfdf5;
+            border-left: 3px solid #10b981;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #065f46;
+            margin: 8px 0;
+            font-family: 'Consolas', 'Courier New', monospace;
+            line-height: 1.5;
+        }
+
+        .iridium-example i {
+            color: #10b981;
+            margin-right: 4px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
         .placeholder-text {
             text-align: center;
             color: #94a3b8;
@@ -676,6 +808,10 @@
             .logo-area .logo-text .subtitle {
                 font-size: 12px;
             }
+
+            .clock-block {
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -694,8 +830,16 @@
                     <span class="subtitle">Отслеживание ВС</span>
                 </div>
             </div>
-            <div class="utc-time">
-                <i class="far fa-clock" style="margin-right:6px;"></i> 12.08.2026 14:32 UTC
+            <div class="clock-block">
+                <div class="clock-item">
+                    <span class="clock-label">UTC</span>
+                    <span class="clock-value" id="utcClock">--:--:--</span>
+                </div>
+                <div class="clock-separator"></div>
+                <div class="clock-item">
+                    <span class="clock-label">Москва</span>
+                    <span class="clock-value" id="mskClock">--:--:--</span>
+                </div>
             </div>
         </header>
 
@@ -737,13 +881,30 @@
     </div>
 
     <script>
+        // ----- ЧАСЫ -----
+        function updateClocks() {
+            const now = new Date();
+            const utcHours = String(now.getUTCHours()).padStart(2, '0');
+            const utcMinutes = String(now.getUTCMinutes()).padStart(2, '0');
+            const utcSeconds = String(now.getUTCSeconds()).padStart(2, '0');
+            document.getElementById('utcClock').textContent = `${utcHours}:${utcMinutes}:${utcSeconds}`;
+
+            const mskHours = String((now.getUTCHours() + 3) % 24).padStart(2, '0');
+            const mskMinutes = String(now.getUTCMinutes()).padStart(2, '0');
+            const mskSeconds = String(now.getUTCSeconds()).padStart(2, '0');
+            document.getElementById('mskClock').textContent = `${mskHours}:${mskMinutes}:${mskSeconds}`;
+        }
+        updateClocks();
+        setInterval(updateClocks, 1000);
+
         // ----- ОБЩИЕ ОПИСАНИЯ -----
         const scenarioDescriptions = {
             normal: 'Для отслеживания используется трекер <strong>Navtelecom</strong>.',
-            warning: 'При потере связи с трекером Navtelecom действовать по алгоритму ниже.'
+            warning: 'При потере связи с трекером Navtelecom действовать по алгоритму ниже.',
+            iridium: 'Отправка координат через спутниковый телефон <strong>Iridium</strong>.'
         };
 
-        // ----- ШТАТНЫЙ РЕЖИМ (с выделением ключевых слов) -----
+        // ----- ШТАТНЫЙ РЕЖИМ -----
         const normalProcedure = [
             'На почту диспетчера ПДС приходит сообщение о начале движения ВС (<span class="hl">Взлёт / Посадка</span>).',
             'С этого момента диспетчер ПДС отслеживает ВС на портале <span class="hl">Wialon Local</span>.',
@@ -751,7 +912,7 @@
             'При подтверждении, что ВС в воздухе, а объект продолжает быть не на связи — перейти к процедуре «<span class="hl">Сбой передачи данных</span>».'
         ];
 
-        // ----- СБОЙ ПЕРЕДАЧИ ДАННЫХ: БЛОК-СХЕМА -----
+        // ----- СБОЙ ПЕРЕДАЧИ ДАННЫХ -----
         const warningFlowchart = {
             type: 'flowchart',
             nodes: [
@@ -799,7 +960,7 @@
                             node: {
                                 type: 'success',
                                 title: 'Шаг 3а',
-                                text: 'Продолжить сопровождение ВС по данным, полученным от экипажа'
+                                text: 'Продолжить сопровождение ВС по данным, полученным от экипажа. <strong>Использовать процедуру отправки местоположения с использованием спутникового телефона.</strong>'
                             }
                         },
                         {
@@ -824,6 +985,15 @@
             sosBlock: true
         };
 
+        // ----- IRIDIUM: СЦЕНАРИЙ ОТПРАВКИ СООБЩЕНИЙ -----
+        const iridiumScenario = {
+            label: 'Отправка сообщений Iridium',
+            icon: 'fa-satellite',
+            badge: 'info',
+            description: scenarioDescriptions.iridium,
+            procedure: { type: 'iridium' }
+        };
+
         // ----- ДАННЫЕ ПО ВС -----
         const aircraftData = {
             ac1: {
@@ -833,6 +1003,7 @@
                 scenarios: {
                     normal: { label: 'Штатный режим', icon: 'fa-check-circle', badge: 'normal', description: scenarioDescriptions.normal, procedure: normalProcedure },
                     warning: { label: 'Сбой передачи данных', icon: 'fa-exclamation-triangle', badge: 'warning', description: scenarioDescriptions.warning, procedure: warningFlowchart },
+                    iridium: iridiumScenario,
                     sos: sosScenario
                 }
             },
@@ -843,6 +1014,7 @@
                 scenarios: {
                     normal: { label: 'Штатный режим', icon: 'fa-check-circle', badge: 'normal', description: scenarioDescriptions.normal, procedure: normalProcedure },
                     warning: { label: 'Сбой передачи данных', icon: 'fa-exclamation-triangle', badge: 'warning', description: scenarioDescriptions.warning, procedure: warningFlowchart },
+                    iridium: iridiumScenario,
                     sos: sosScenario
                 }
             },
@@ -853,6 +1025,7 @@
                 scenarios: {
                     normal: { label: 'Штатный режим', icon: 'fa-check-circle', badge: 'normal', description: scenarioDescriptions.normal, procedure: normalProcedure },
                     warning: { label: 'Сбой передачи данных', icon: 'fa-exclamation-triangle', badge: 'warning', description: scenarioDescriptions.warning, procedure: warningFlowchart },
+                    iridium: iridiumScenario,
                     sos: sosScenario
                 }
             },
@@ -863,6 +1036,7 @@
                 scenarios: {
                     normal: { label: 'Штатный режим', icon: 'fa-check-circle', badge: 'normal', description: scenarioDescriptions.normal, procedure: normalProcedure },
                     warning: { label: 'Сбой передачи данных', icon: 'fa-exclamation-triangle', badge: 'warning', description: scenarioDescriptions.warning, procedure: warningFlowchart },
+                    iridium: iridiumScenario,
                     sos: sosScenario
                 }
             },
@@ -873,6 +1047,7 @@
                 scenarios: {
                     normal: { label: 'Штатный режим', icon: 'fa-check-circle', badge: 'normal', description: scenarioDescriptions.normal, procedure: normalProcedure },
                     warning: { label: 'Сбой передачи данных', icon: 'fa-exclamation-triangle', badge: 'warning', description: scenarioDescriptions.warning, procedure: warningFlowchart },
+                    iridium: iridiumScenario,
                     sos: sosScenario
                 }
             },
@@ -883,6 +1058,7 @@
                 scenarios: {
                     normal: { label: 'Штатный режим', icon: 'fa-check-circle', badge: 'normal', description: scenarioDescriptions.normal, procedure: normalProcedure },
                     warning: { label: 'Сбой передачи данных', icon: 'fa-exclamation-triangle', badge: 'warning', description: scenarioDescriptions.warning, procedure: warningFlowchart },
+                    iridium: iridiumScenario,
                     sos: sosScenario
                 }
             },
@@ -893,6 +1069,7 @@
                 scenarios: {
                     normal: { label: 'Штатный режим', icon: 'fa-check-circle', badge: 'normal', description: scenarioDescriptions.normal, procedure: normalProcedure },
                     warning: { label: 'Сбой передачи данных', icon: 'fa-exclamation-triangle', badge: 'warning', description: scenarioDescriptions.warning, procedure: warningFlowchart },
+                    iridium: iridiumScenario,
                     sos: sosScenario
                 }
             },
@@ -903,6 +1080,7 @@
                 scenarios: {
                     normal: { label: 'Штатный режим', icon: 'fa-check-circle', badge: 'normal', description: scenarioDescriptions.normal, procedure: normalProcedure },
                     warning: { label: 'Сбой передачи данных', icon: 'fa-exclamation-triangle', badge: 'warning', description: scenarioDescriptions.warning, procedure: warningFlowchart },
+                    iridium: iridiumScenario,
                     sos: sosScenario
                 }
             }
@@ -972,7 +1150,7 @@
             scenarioKeys.forEach(key => {
                 const sc = scenarios[key];
                 const isActive = (currentScenario === key) ? 'active' : '';
-                const labelMap = { normal: 'штатный', warning: 'сбой', sos: 'тревога' };
+                const labelMap = { normal: 'штатный', warning: 'сбой', iridium: 'инструкция', sos: 'тревога' };
                 html += `
                     <div class="scenario-item ${isActive}" onclick="selectScenario('${acId}','${key}')">
                         <div class="sc-left">
@@ -1024,6 +1202,8 @@
 
             if (scenario.procedure && scenario.procedure.type === 'flowchart') {
                 bodyHtml = renderFlowchart(scenario.procedure);
+            } else if (scenario.procedure && scenario.procedure.type === 'iridium') {
+                bodyHtml = renderIridium();
             } else if (Array.isArray(scenario.procedure)) {
                 scenario.procedure.forEach((step, idx) => {
                     bodyHtml += `
@@ -1044,6 +1224,84 @@
                     </div>
                     ${descHtml}
                     ${bodyHtml}
+                </div>
+            `;
+        }
+
+        // ----- ОТРИСОВКА IRIDIUM -----
+        function renderIridium() {
+            return `
+                <div class="iridium-section">
+
+                    <div class="iridium-subtitle">
+                        <i class="fas fa-cog"></i> Подготовка
+                    </div>
+                    <div class="iridium-steps">
+                        <div class="iridium-step">
+                            <div class="ir-num">1</div>
+                            <div class="ir-text">Выйдите на открытое место, откиньте антенну, дождитесь надписи <strong>Registered</strong> на экране.</div>
+                        </div>
+                        <div class="iridium-step">
+                            <div class="ir-num">2</div>
+                            <div class="ir-text">
+                                Убедитесь, что SMS-центр настроен (делается один раз):
+                                <br><span class="menu-path">Menu → Messages → Settings → Service Center</span>
+                                <br>Введите: <code>+79541070005</code> → <strong>OK</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="iridium-subtitle">
+                        <i class="fas fa-paper-plane"></i> Отправка на email, не сохранённый в телефонной книге
+                    </div>
+                    <div class="iridium-steps">
+                        <div class="iridium-step">
+                            <div class="ir-num">1</div>
+                            <div class="ir-text"><span class="menu-path">Menu → Messages → Create Message</span></div>
+                        </div>
+                        <div class="iridium-step">
+                            <div class="ir-num">2</div>
+                            <div class="ir-text">
+                                Наберите сообщение в формате: <code>email_адрес</code> пробел <code>текст_сообщения</code>
+                            </div>
+                        </div>
+                        <div class="iridium-step">
+                            <div class="ir-num">3</div>
+                            <div class="ir-text">
+                                <strong>Важно:</strong> чтобы ввести символ <code>@</code> — нажмите клавишу <strong>1</strong> дважды.
+                            </div>
+                        </div>
+                        <div class="iridium-step">
+                            <div class="ir-num">4</div>
+                            <div class="ir-text">
+                                Когда сообщение набрано, нажмите <span class="menu-path">Options → Send</span>
+                            </div>
+                        </div>
+                        <div class="iridium-step">
+                            <div class="ir-num">5</div>
+                            <div class="ir-text">
+                                На экране <strong>Send To</strong> выберите <span class="menu-path">New Recipient → Add → Enter Number</span>
+                            </div>
+                        </div>
+                        <div class="iridium-step">
+                            <div class="ir-num">6</div>
+                            <div class="ir-text">
+                                Введите специальный номер сервера: <code>+*2</code> (или <code>00*2</code>) → <strong>OK</strong>
+                            </div>
+                        </div>
+                        <div class="iridium-step">
+                            <div class="ir-num">7</div>
+                            <div class="ir-text">
+                                Нажмите <span class="menu-path">Send</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="iridium-example">
+                        <i class="fas fa-lightbulb"></i>
+                        <strong>Пример сообщения:</strong><br>
+                        ops@skylight.aero 71.973028, 102.495729 TO/LDG
+                    </div>
                 </div>
             `;
         }
